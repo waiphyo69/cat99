@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title> CATS!!! </title>
+    These are all the cats!
+  </head>
+
+
+
+
+<body>
+  <table>
+    <% @cats.each do |cat| %>
+      <tr>
+        <td> <a href="<%= cat_url(cat.id)%>">View Cat <%= cat.id %></a> </td>
+      </tr>
+    <% end %>
+  </table>
+
+  <br>
+  <a href="<%=new_cat_url%>">Make A New Cat!!</a>
+</body>
+
+
+
+
+
+
+
+</html>

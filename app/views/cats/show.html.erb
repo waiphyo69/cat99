@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+<title> <%= @cat.name %> </title>
+  This cat.
+</head>
+
+
+
+
+<body>
+  <table>
+    <% cat = @cat %>
+      <tr>
+        <td> ID: <%=cat.id%>  </td>
+        <td> Name: <%=cat.name%> </td>
+        <td> Color: <%=cat.color%>  </td>
+        <td> Sex: <%=cat.sex%>  </td>
+        <td> Birthday: <%=cat.birth_date%> </td>
+        <td> Description: <%=cat.description%> </td>
+      </tr>
+  </table>
+
+  <a href="<%= edit_cat_url(@cat.id)%>">Edit This Cat!!</a>
+
+  <% @cat.cat_rental_requests.each do |request| %>
+  <br>Start Date:  <%= request.start_date%> End Date: <%= request.end_date%>
+  <%end%>
+</body>
+
+
+
+
+
+</html>
