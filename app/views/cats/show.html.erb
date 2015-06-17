@@ -25,8 +25,18 @@
   <a href="<%= edit_cat_url(@cat.id)%>">Edit This Cat!!</a>
 
   <% @cat.cat_rental_requests.each do |request| %>
-  <br>Start Date:  <%= request.start_date%> End Date: <%= request.end_date%>
+  <br>Start Date:  <%= request.start_date%> End Date: <%= request.end_date%> Status <%= request.status%>
+  <% if request.status == "pending"%>
+      <form action="<%=approve_cat_rental_request_url(request.id)%>" method="POST">
+        <button>Approve the request!</button>
+      </form>
+      <form action="<%=deny_cat_rental_request_url(request.id)%>" method="POST">
+        <button>Deny the request!</button>
+      </form>
+    <%end%>
   <%end%>
+
+  <br>
 </body>
 
 

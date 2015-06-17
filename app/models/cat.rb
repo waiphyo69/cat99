@@ -17,31 +17,14 @@ class Cat < ActiveRecord::Base
   validates :birth_date, presence: true
   validate :no_overlapping_approved_requests? => true
 
+  belongs_to :owner, class_name: 'User', foreign_key: :user_id
+  
   has_many(
   :cat_rental_requests,
   :class_name => "CatRentalRequest",
   :foreign_key => :cat_id,
   :dependent => :destroy
   )
-
-
-  def overlapping_requests
-    overlaps = []
-    requests = cat_rental_requests
-    (requests.length - 1).times do |idx1|
-        (idx1+1..requests.length).times do |idx2|
-          if requests[idx1].start_date > requests[idx2].end_date ||
-            requests[idx2].start_date > requests[idx1].end_date
-            overlaps << request[idx1] << request[idx2]
-          end
-        end
-      end
-    overlaps.uniq
-  end
-
-  def no_overlapping_approved_requests?
-    !overlapping_requests.any?{ |request| request.status == "approved"}
-  end
 
 
 end##########################

@@ -1,8 +1,11 @@
-<% action_url = @cat.persisted? ? edit_cat_url(@cat.id) : cats_url%>
+<% action_url = @cat.persisted? ? cat_url(@cat.id) : cats_url%>
 <% form_method = @cat.persisted? ? "PATCH" : "POST" %>
 <% button_text = @cat.persisted? ? "Edit this cat!!" : "Create the cat!"%>
 
 <form action="<%=action_url%>" method="POST" >
+  <input type="hidden"
+       name="authenticity_token"
+       value="<%= form_authenticity_token %>">
 <input type="hidden" name="_method" value="<%=form_method%>">
 
 <label for="cat_name">Name</label>

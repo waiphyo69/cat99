@@ -50,11 +50,53 @@ class CatRentalRequest < ActiveRecord::Base
     SQL
   end
 
+  def other_pending_requests
+    # self.cat.cat_rental_requests.select {|request| (request.id != self.id) &&
+    #   (request.status == "approved")}
+    self.cat.cat_rental_requests.find_by_sql([<<-SQL, self.cat_id])
+    SELECT
+      cat_rental_requests.*
+    FROM
+      cat_rental_requests JOIN cats ON cats.id = cat_rental_requests.cat_id
+    WHERE
+      (cat_rental_requests.status = "pending")
+      AND (cats.id = ?)
+    SQL
+  end
+
+  def overlapping_pending_requests
+    arr = []
+    other_pending_requests.each do |request|
+      if !(start_date > request.end_date || end_date < request.start_date)
+        arr << request
+      end
+    end
+    arr.uniq
+  end
+
   def no_overlapping_approved_requests
     other_approved_requests.each do |request|
       if !(start_date > request.end_date || end_date < request.start_date)
         errors[:cat_id] << "error!!!!"
       end
     end
+  end
+
+
+  def approve!
+    raise "not pending!" unless self.status == "pending"
+    self.transaction do
+      self.status = "approved"
+      self.save! if self.valid?
+
+      overlapping_pending_requests.each do |request|
+        request.status = "denied"
+      end
+    end
+  end
+
+  def deny!
+    self.status = "denied"
+    self.save!
   end
 end

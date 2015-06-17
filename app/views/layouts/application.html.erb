@@ -2,6 +2,13 @@
 <html>
 <head>
   <title>Cat99</title>
+  <% if session[:session_token] %>
+    Hello <%=User.find_by(session_token: session[:session_token]).user_name %>
+    <%else%>
+    <form action="<%=new_session_url%>" method="get">
+    <button> Log in </button>
+    </form>
+    <%end%>
   <%= csrf_meta_tags %>
 </head>
 <body>
